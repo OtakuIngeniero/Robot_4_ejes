@@ -20,3 +20,10 @@ Controlador:
 
 1 ------------ Arduino nano
 
+# TO DO list:
+- Terminar y probar el modelo completo
+- Imprimirlo :v
+- Fusionar el controlador
+- Ver como hacer el gcode
+- Rezar
+
