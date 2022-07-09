@@ -21,7 +21,6 @@ Controlador:
 1 ------------ Arduino nano
 
 # TO DO list:
-- Imprimirlo :v
 - Fusionar el controlador
 - Ver como hacer el gcode
 - Rezar
