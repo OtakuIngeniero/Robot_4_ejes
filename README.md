@@ -1,6 +1,11 @@
 # Robot_4_ejes
 proyecto de robot pick n place de cuatro grados de libertad, 250mm de alcance y 400g de carga maxima a maxima extencion
 
+<p align="center">
+  <img src="ensambles/robot modelo.png" width="350" title="hover text">
+  <img src="robot irl/img/brazo.jpeg" width="350" alt="accessibility text">
+</p>
+
 - El diseño del robot esta completo y es funcional
 - se midio en un modelo real que cumple las especificaciones planteadas de extencion y carga maxima
 
