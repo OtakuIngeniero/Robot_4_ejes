@@ -3,6 +3,10 @@ proyecto de robot pick n place de cuatro grados de libertad, 250mm de alcance y 
 
 <p align="center">
   <img src="ensambles/robot modelo.png" width="350" title="hover text">
+</p>
+
+<p align="center">
+  <img src="robot irl/img/brazo2.jpeg" width="350" title="hover text">
   <img src="robot irl/img/brazo.jpeg" width="350" alt="accessibility text">
 </p>
 
