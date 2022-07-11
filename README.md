@@ -24,8 +24,11 @@ proyecto de robot pick n place de cuatro grados de libertad, 250mm de alcance y 
 1 ------------ Arduino nano
 
 - Buloneria:
+
 2 ------------ tornillos de 30mm con tuercas
+
 14 ----------- tornillos de 15mm
+
 4 ------------ tornillos de 20mm
 
 1 ------------ varilla retificada de 6mm
