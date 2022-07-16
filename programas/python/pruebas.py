@@ -56,13 +56,20 @@ pprint(Robot.dir_cinematics(Q))
 #pprint (simplify(mrem))
 #print ("finite")
 Robot.inicar()
-Robot.stream([0,90,90,0])
+
+for ts in  range(10,1000,100):
+    for i in  range(45,121,1):
+        Robot.stream([i,i,i,0])
+        time.sleep(1/ts)
+
+    for i in  range(0,120-45,1):
+        Robot.stream([120-i,120-i,120-i,0])
+        time.sleep(1/ts)
+
+Robot.stream([120,120,120,0])
 time.sleep(1)
-Robot.stream([45,90,90,0])
-time.sleep(1)
-Robot.stream([90,90,90,0])
-time.sleep(1)
-Robot.stream([90,130,90,0])
+Robot.stream([45,45,45,0])
+#Robot.stream([10,10,10,0])
 Robot.shutdown()
 
 

@@ -135,11 +135,20 @@ class robot:
 #-------------------------------------------------------------------------------------------------------
 
     def stream(self,Q):
+        startMarker = "."
+        x = "z"
+
         paquete = empaquetar(Q)
-        print (paquete)
+
+        while  ord(x) != startMarker: 
+            x = self.arduino.read()
+
+        print (x.decode('UTF-8'))
+        print (paquete.encode())
+
         self.arduino.write(paquete.encode())
-        #self.arduino.write(b'4')
         return 
+#-------------------------------------------------------------------------------------------------------
     def shutdown(self):
         self.arduino.close()
     
