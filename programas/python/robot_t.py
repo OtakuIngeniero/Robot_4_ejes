@@ -1,3 +1,4 @@
+from math import degrees
 from numbers import Real
 from sympy import *
 import sympy
@@ -9,17 +10,19 @@ class robot:
     _pos = [0,0,0,0]
     _d = [0,0,0,0,0]
     _alfa = [-pi/2,0,0,pi/2,0]
-    _a = [0,115,117.62,25,0]
+    _a = [0,115,117,25,0]
     _vth_max = (5/3)*pi
-    _home = eye(4)
+    _home = [50,0,0,0]
 
-    Ts = 1*10**(-3)
-    offsets_motores = [0,0,0,0]
+    Ts = 20*10**(-3)
+    offsets_motores = [90,50,90,90]
     theta = [0,0,0,0]
     A04 = eye(4)
     A_base = eye(4)
     A_herr = eye(4)
-    puerto = 'COM4'
+    gripper = 0
+    motors = 0
+    puerto = 'COM4' # esto va a cambiar segun donde se conecte y hasta ahora no se como hacer para autodetectarlo
     brate = 115200
 #-------------------------------------------------------------------------------------------------------
 
@@ -46,7 +49,7 @@ class robot:
 
         A[2,3] = -self._a[1]*sin(Q[1]) - self._a[2]*sin(Q[1]+Q[2])
 
-
+        #A = sympy.simplify(A)
         return self.A_base * A * self.A_herr
 
 #-------------------------------------------------------------------------------------------------------
@@ -114,41 +117,81 @@ class robot:
 #-------------------------------------------------------------------------------------------------------
 # metodo que inicia la posicion del robot y lo manda a home
     def inicar(self):
-        self._home = Matrix([[1,0,0,50],[0,1,0,0],[0,0,1,0],[0,0,0,1]])
-        self.A04 = self._home
-        self._pos = P2A (self.A04)
+        self.A04 = P2A (self._home)
+        self._pos = self._home
         self.theta = self.inv_cinematics(self.A04)
         self.arduino = serial.Serial(self.puerto,self.brate)
         time.sleep(2)
+        self.motors = 1
+        self.homeJ()
+        
 #-------------------------------------------------------------------------------------------------------
 # metodo que manda al robot a hacer un home
-    def homeJ(self,home_speed):
-        self.moveJ(self._home,home_speed)
+    def homeJ(self):
+        self.moveJ(self._home)
 #-------------------------------------------------------------------------------------------------------
 # metodo que hace al robot hacer un movimiento joint entre su pose actual y la pose deseada
 
-# por ahora solo voy a devolver los angulos deseados y despues lo hago bien
-    def moveJ(self,pose,joint_speed):
+# por ahora no le puse velocidad
+    def moveJ(self,pose):
         A = P2A(pose)
         Q = self.inv_cinematics(A)
-        return Q
+        self.stream(Q)
+        self.A04 = A
+        self._pos = pose
+        self.theta = Q
+#-------------------------------------------------------------------------------------------------------
+    def moveL(self,pose,tiempo):
+        N_steps = tiempo/self.Ts
+        for i in range(0,int(N_steps),1):
+            dx = (pose[0] - self._pos[0])/(N_steps - i)
+            dy = (pose[1] - self._pos[1])/(N_steps - i)
+            dz = (pose[2] - self._pos[2])/(N_steps - i)
+            dth = (pose[3] - self._pos[3])/(N_steps - i)
+            
+            #self._pos = self._pos + [dx,dy,dz,dth]
+            self._pos[0] = self._pos[0] + dx
+            self._pos[1] = self._pos[1] + dy
+            self._pos[2] = self._pos[2] + dz
+            self._pos[3] = self._pos[3] + dth
+
+            
+            self.A04 = P2A(self._pos)
+            self.theta = self.inv_cinematics(self.A04)
+
+            self.stream(self.theta)
+
 #-------------------------------------------------------------------------------------------------------
 
     def stream(self,Q):
         startMarker = "."
         x = "z"
 
-        paquete = empaquetar(Q)
+        paquete = empaquetar(self.dh2rob(Q),self.gripper,self.motors)
 
-        while  ord(x) != startMarker: 
+        """while  x != startMarker.encode(): 
             x = self.arduino.read()
+            #print (x)"""
 
-        print (x.decode('UTF-8'))
         print (paquete.encode())
 
         self.arduino.write(paquete.encode())
+
+        while  x != startMarker.encode(): #me quedo esperando el echo
+            x = self.arduino.read()
+
         return 
 #-------------------------------------------------------------------------------------------------------
     def shutdown(self):
+        self.motors = 0
+        self.gripper = 0
+        self.stream(self.theta)
         self.arduino.close()
-    
+#-------------------------------------------------------------------------------------------------------
+    def dh2rob(self,Q):
+        V = [0,0,0,0]
+        V[0] = int(self.offsets_motores[0] + degrees(Q[0]))
+        V[1] = int(self.offsets_motores[1] - degrees(Q[1]))
+        V[2] = int(self.offsets_motores[2] + degrees(Q[2]) - V[1])
+        V[3] = int(self.offsets_motores[3] + degrees(Q[3]))
+        return V

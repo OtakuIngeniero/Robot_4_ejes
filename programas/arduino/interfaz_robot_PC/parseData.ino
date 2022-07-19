@@ -13,4 +13,13 @@ void parseData() {
   strtokIndx = strtok(NULL, ":"); 
   Q[3] = atoi(strtokIndx);     // convert this part to a float
 
+  strtokIndx = strtok(NULL, ":"); 
+  Q[4] = atoi(strtokIndx);     // convert this part to a float
+
+  strtokIndx = strtok(NULL, ":"); 
+  gripper = atoi(strtokIndx);     // convert this part to a float
+
+  strtokIndx = strtok(NULL, ":"); 
+  motors = atoi(strtokIndx);     // convert this part to a float
+
 }
