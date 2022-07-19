@@ -5,10 +5,13 @@ proyecto de robot pick n place de cuatro grados de libertad, 250mm de alcance y 
   <img src="ensambles/robot modelo.png" width="350" title="hover text">
 </p>
 
+
 <p align="center">
-  <img src="robot irl/img/brazo2.jpeg" width="350" title="hover text">
-  <img src="robot irl/img/brazo.jpeg" width="350" alt="accessibility text">
+  
+  https://user-images.githubusercontent.com/108755939/179776285-c8175e38-8c07-46ec-a8a5-bc581136b5d1.mp4
+  
 </p>
+
 
 - El diseño del robot esta completo y es funcional
 - Se midio en un modelo real que cumple las especificaciones planteadas de extencion y carga maxima
