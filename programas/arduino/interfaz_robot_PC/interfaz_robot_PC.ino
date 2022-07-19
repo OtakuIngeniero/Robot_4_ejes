@@ -12,7 +12,7 @@ int pwm4 = 5;        // uso la pata D5 para enviar el PWM al servo 4
 int gripper_out = 6; // uso la pata D6 para el gripper
 
 const int pinLED = 13;
-int Q[] = {90,90,90,90};
+int Q[] = {90,150,47,90};
 int gripper = 0;
 int motors = 0;
 // home <90:140:40:0>

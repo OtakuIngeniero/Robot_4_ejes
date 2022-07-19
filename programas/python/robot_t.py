@@ -15,7 +15,7 @@ class robot:
     _home = [50,0,0,0]
 
     Ts = 20*10**(-3)
-    offsets_motores = [90,50,90,90]
+    offsets_motores = [90,50,90,85]
     theta = [0,0,0,0]
     A04 = eye(4)
     A_base = eye(4)
@@ -121,9 +121,12 @@ class robot:
         self._pos = self._home
         self.theta = self.inv_cinematics(self.A04)
         self.arduino = serial.Serial(self.puerto,self.brate)
+        self.arduino.flushInput()
+        self.arduino.flushOutput()
         time.sleep(2)
         self.motors = 1
         self.homeJ()
+
         
 #-------------------------------------------------------------------------------------------------------
 # metodo que manda al robot a hacer un home
@@ -186,6 +189,10 @@ class robot:
         self.motors = 0
         self.gripper = 0
         self.stream(self.theta)
+        self.arduino.flushInput()
+        self.arduino.flushOutput()
+        time.sleep(1)
+        print("apagado")
         self.arduino.close()
 #-------------------------------------------------------------------------------------------------------
     def dh2rob(self,Q):
